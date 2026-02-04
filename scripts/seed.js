@@ -24,7 +24,7 @@ const SAMPLE_BOOKS = [
   { title: "Oathbringer", author: "Brandon Sanderson", year: 2017, rating: 4.7, tags: ["epic","magic"], description: "History and truth collide.", series: "The Stormlight Archive", seriesNumber: 3 }
 ];
 
-async function run() {
+async function seedBooks() {
   await connectMongo();
   const db = getDb();
   const books = db.collection("books");
@@ -32,7 +32,7 @@ async function run() {
   const count = await books.countDocuments();
   if (count >= 20) {
     console.log(`Books collection already has ${count} records. Skipping seed.`);
-    await closeMongo();
+    await closeMongo(); 
     return;
   }
 
@@ -47,7 +47,4 @@ async function run() {
   await closeMongo();
 }
 
-run().catch(err => {
-  console.error(err);
-  process.exit(1);
-});
+module.exports = { seedBooks };
