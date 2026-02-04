@@ -12,6 +12,8 @@ MongoStore = MongoStore.default || MongoStore;
 const { connectMongo, closeMongo } = require("./database/mongo");
 const booksRouter = require("./routes/booksroute");
 const authRouter = require("./routes/authroute");
+const { seedBooks } = require("./scripts/seed");
+
 
 const app = express();
 
@@ -169,15 +171,21 @@ app.use((req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
+
 (async () => {
   try {
-    await connectMongo();
-    app.listen(PORT, () => console.log(`at: http://localhost:${PORT}`));
+    await connectMongo();   
+    await seedBooks();      
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
   } catch (err) {
     console.error("Failed to start server:", err);
     process.exit(1);
   }
 })();
+
 
 process.on("SIGINT", async () => {
   await closeMongo();
