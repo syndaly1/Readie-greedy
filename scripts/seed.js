@@ -25,14 +25,12 @@ const SAMPLE_BOOKS = [
 ];
 
 async function seedBooks() {
-  await connectMongo();
   const db = getDb();
   const books = db.collection("books");
 
   const count = await books.countDocuments();
   if (count >= 20) {
     console.log(`Books collection already has ${count} records. Skipping seed.`);
-    await closeMongo(); 
     return;
   }
 
@@ -44,7 +42,7 @@ async function seedBooks() {
 
   await books.insertMany(docs);
   console.log(`Seeded ${docs.length} books.`);
-  await closeMongo();
 }
+
 
 module.exports = { seedBooks };
